@@ -9,6 +9,7 @@ var board = [
 var availableSpot = [];
 
 var currentPlayer;
+var otherPlayer;
 
 function setup() {
   createCanvas(650,650);
@@ -20,9 +21,11 @@ function setup() {
   var num = Math.round(random(0,1))
   if (num === 0) {
     currentPlayer = player1
+    otherPlayer=player2
   }
   if (num === 1) {
     currentPlayer = player2
+    otherPlayer=player1
   }
   console.log(currentPlayer)
 }
@@ -46,20 +49,70 @@ function draw() {
       text(board[i][j], w/3*i+50, h/3*j+h/3-50)
     }
   } 
-  next();
+  //next();
   drawSprites();
 }
 
-function mousePressed() {
+function mouseClicked() {
+  console.log(mouseX, mouseY)
+  //217,212
+  //430,215
+  //220,432
+  //432,432
+
+  if(mouseX>0 && mouseX<215 && mouseY<215 && mouseY>0){
+    board[0][0]=currentPlayer
+    availableSpot.splice(0, 1)[0]
+  }
+  if(mouseX<430 && mouseX>215 && mouseY<215 && mouseY>0){
+    board[1][0]=currentPlayer
+    availableSpot.splice(3, 1)[0]
+  }
+  if(mouseX>430 && mouseX<650 && mouseY<215 && mouseY>0){
+    board[2][0]=currentPlayer
+    availableSpot.splice(6, 1)[0]
+  }  
+  
+  
+  if(mouseX>0 && mouseX<215 && mouseY>215 && mouseY<430){
+    board[0][1]=currentPlayer
+    availableSpot.splice(1, 1)[0]
+  }
+  if(mouseX<430 && mouseX>215 && mouseY>215 && mouseY<430){
+    board[1][1]=currentPlayer
+    availableSpot.splice(4, 1)[0]
+  }
+  if(mouseX>430 && mouseX<650 && mouseY>215 && mouseY<430){
+    board[2][1]=currentPlayer
+    availableSpot.splice(7, 1)[0]
+  }
+
+  
+  if(mouseX>0 && mouseX<215 && mouseY<650 && mouseY>430){
+    board[0][2]=currentPlayer
+    availableSpot.splice(2, 1)[0]
+  }
+  if(mouseX<430 && mouseX>215 && mouseY<650 && mouseY>430){
+    board[1][2]=currentPlayer
+    availableSpot.splice(5, 1)[0]
+  }
+  if(mouseX>430 && mouseX<650 && mouseY<650 && mouseY>430){
+    board[2][2]=currentPlayer
+    availableSpot.splice(8, 1)[0]
+  }
+
+  
   next();
 }
 
-function next() {
-  var index = floor(random(availableSpot.length))
-  console.log(index); //0,8
-  var spot = availableSpot.splice(index, 1)
-  console.log(spot);  //[1,2]
-  var i = spot[0]
-  var j = spot[1]
-  board[i],[j] = currentPlayer
+function next(){
+  //if(frameCount%20===0){
+    var index = floor(random(availableSpot.length))
+    var spot = availableSpot.splice(index, 1)[0]
+
+    var i = spot[0]
+    var j = spot[1]
+   
+    board[i][j] =otherPlayer
+  //}
 }
