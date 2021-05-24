@@ -10,6 +10,7 @@ var availableSpot = [];
 
 var currentPlayer;
 var otherPlayer;
+var winner;
 
 function setup() {
   createCanvas(650,650);
@@ -101,12 +102,13 @@ function mouseClicked() {
     availableSpot.splice(8, 1)[0]
   }
 
-  
+  checkWinning();
   next();
 }
 
 function next(){
-  //if(frameCount%20===0){
+  //if(frameCount%20====0){
+    if(availableSpot.length>0){
     var index = floor(random(availableSpot.length))
     var spot = availableSpot.splice(index, 1)[0]
 
@@ -114,5 +116,54 @@ function next(){
     var j = spot[1]
    
     board[i][j] =otherPlayer
+    }
   //}
+}
+
+function checkWinning(){
+  var winner=null;
+  //console.log("check winning")
+  //console.log(board)
+
+  //row
+  for(var i = 0; i < 3; i++) {
+    if(board[i][0]===board[i][1]===board[i][2]){
+      winner=board[i][0];
+      console.log(winner)
+      
+    }
+  }
+  
+  //column
+  for(var i = 0; i < 3; i++) {
+    if(board[0][i]===board[1][i]===board[2][i]){
+      winner=board[0][i];
+      console.log(winner)
+    
+    }
+  }
+  
+  //diagonal 
+  if(board[0][0]===board[1][1]===board[2][2] ||
+     board[0][2]===board[1][1]===board[2][0]){
+      winner=board[0][0];
+      console.log(winner)
+      
+  }
+
+  //Tie
+  if(winner===null && availableSpot.length===0){
+    console.log("tie")
+  }
+  else{
+
+    alert(winner  + " Wins!")
+    textSize(32)
+    text(winner + " Wins!", 325,325)
+    console.log(winner +" Wins!")
+
+  }
+  
+
+      
 }
