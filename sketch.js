@@ -10,7 +10,7 @@ var availableSpot = [];
 
 var currentPlayer;
 var otherPlayer;
-var winner;
+var winner=null;
 
 function setup() {
   createCanvas(650,650);
@@ -28,7 +28,7 @@ function setup() {
     currentPlayer = player2
     otherPlayer=player1
   }
-  console.log(currentPlayer)
+  //console.log(currentPlayer)
 }
 
 function draw() {
@@ -55,60 +55,68 @@ function draw() {
 }
 
 function mouseClicked() {
-  console.log(mouseX, mouseY)
-  //217,212
-  //430,215
-  //220,432
-  //432,432
-
-  if(mouseX>0 && mouseX<215 && mouseY<215 && mouseY>0){
+  if(mouseX>0 && mouseX<215 && mouseY<215 && mouseY>0 && board[0][0]==''){
     board[0][0]=currentPlayer
     availableSpot.splice(0, 1)[0]
   }
-  if(mouseX<430 && mouseX>215 && mouseY<215 && mouseY>0){
+  if(mouseX<430 && mouseX>215 && mouseY<215 && mouseY>0 && board[1][0]==''){
     board[1][0]=currentPlayer
     availableSpot.splice(3, 1)[0]
   }
-  if(mouseX>430 && mouseX<650 && mouseY<215 && mouseY>0){
+  if(mouseX>430 && mouseX<650 && mouseY<215 && mouseY>0 && board[2][0]==''){
     board[2][0]=currentPlayer
     availableSpot.splice(6, 1)[0]
   }  
   
   
-  if(mouseX>0 && mouseX<215 && mouseY>215 && mouseY<430){
+  if(mouseX>0 && mouseX<215 && mouseY>215 && mouseY<430 && board[0][1]==''){
     board[0][1]=currentPlayer
     availableSpot.splice(1, 1)[0]
   }
-  if(mouseX<430 && mouseX>215 && mouseY>215 && mouseY<430){
+  if(mouseX<430 && mouseX>215 && mouseY>215 && mouseY<430 && board[1][1]==''){
     board[1][1]=currentPlayer
     availableSpot.splice(4, 1)[0]
   }
-  if(mouseX>430 && mouseX<650 && mouseY>215 && mouseY<430){
+  if(mouseX>430 && mouseX<650 && mouseY>215 && mouseY<430 && board[2][1]==''){
     board[2][1]=currentPlayer
     availableSpot.splice(7, 1)[0]
   }
 
   
-  if(mouseX>0 && mouseX<215 && mouseY<650 && mouseY>430){
+  if(mouseX>0 && mouseX<215 && mouseY<650 && mouseY>430 && board[0][2]==''){
     board[0][2]=currentPlayer
     availableSpot.splice(2, 1)[0]
   }
-  if(mouseX<430 && mouseX>215 && mouseY<650 && mouseY>430){
+  if(mouseX<430 && mouseX>215 && mouseY<650 && mouseY>430 && board[1][2]==''){
     board[1][2]=currentPlayer
     availableSpot.splice(5, 1)[0]
   }
-  if(mouseX>430 && mouseX<650 && mouseY<650 && mouseY>430){
+  if(mouseX>430 && mouseX<650 && mouseY<650 && mouseY>430 && board[2][2]==''){
     board[2][2]=currentPlayer
     availableSpot.splice(8, 1)[0]
   }
 
-  checkWinning();
-  next();
+  var result=checkWinning();
+
+  if(result!=null){
+    noLoop();
+    if(winner==currentPlayer)
+    alert( "You Win!")
+    else if(result=="tie"){
+      alert( "It's a tie")
+    }
+    else{
+      alert("You Lose");
+    }
+  }
+
+  else{
+    next();
+  } 
 }
 
 function next(){
-  //if(frameCount%20====0){
-    if(availableSpot.length>0){
+  if(availableSpot.length>0){
     var index = floor(random(availableSpot.length))
     var spot = availableSpot.splice(index, 1)[0]
 
@@ -116,54 +124,43 @@ function next(){
     var j = spot[1]
    
     board[i][j] =otherPlayer
-    }
-  //}
+  }
 }
 
 function checkWinning(){
-  var winner=null;
-  //console.log("check winning")
-  //console.log(board)
+  winner=null;
 
   //row
   for(var i = 0; i < 3; i++) {
-    if(board[i][0]===board[i][1]===board[i][2]){
+    if(checkEquals(board[i][0],board[i][1],board[i][2])){
       winner=board[i][0];
-      console.log(winner)
-      
     }
   }
   
   //column
   for(var i = 0; i < 3; i++) {
-    if(board[0][i]===board[1][i]===board[2][i]){
+    if(checkEquals(board[0][i],board[1][i],board[2][i])){
       winner=board[0][i];
-      console.log(winner)
-    
     }
   }
   
   //diagonal 
-  if(board[0][0]===board[1][1]===board[2][2] ||
-     board[0][2]===board[1][1]===board[2][0]){
-      winner=board[0][0];
-      console.log(winner)
-      
+  if(checkEquals(board[0][0],board[1][1],board[2][2]) ||
+     checkEquals(board[0][2],board[1][1],board[2][0])){
+      winner=board[0][0];    
   }
 
   //Tie
-  if(winner===null && availableSpot.length===0){
-    console.log("tie")
+  if(winner==null && availableSpot.length==0){
+    return "tie";
   }
-  else{
+  else if(winner!==null){
+    return winner;  
+  }    
+}
 
-    alert(winner  + " Wins!")
-    textSize(32)
-    text(winner + " Wins!", 325,325)
-    console.log(winner +" Wins!")
-
-  }
-  
-
-      
+function checkEquals(x,y,z){
+  if(x==y && y==z && x!=''){
+    return true;
+  } 
 }
